@@ -1,0 +1,102 @@
+Company Name: TechStart Solutions
+Founded: 2024
+Location: San Francisco, CA
+Mission: Providing innovative software solutions for startups
+
+===== SERVICES =====
+
+Web Development
+Custom web applications
+E-commerce platforms
+Progressive web apps
+Duration: 4-12 weeks
+Technology: React, Node.js, Python
+
+Mobile App Development
+iOS and Android apps
+Cross-platform solutions
+Duration: 6-16 weeks
+Technology: React Native, Flutter
+
+Cloud Infrastructure
+AWS setup and management
+DevOps automation
+CI/CD pipeline setup
+Duration: 2-4 weeks
+
+Technical Consulting
+Architecture review
+Technology selection
+Team augmentation
+Hourly or project-based
+
+===== PRICING =====
+
+Pricing Tier 1 - Starter Package
+- Price: 50000 - 100000
+- Suitable for: MVPs, small projects
+- Includes: Basic features, 1 month support
+- Timeline: 4-6 weeks
+
+Pricing Tier 2 - Professional Package
+- Price: 100000- 150000
+- Suitable for: Medium-sized projects
+- Includes: Advanced features, 3 months support
+- Timeline: 8-12 weeks
+
+Pricing Tier 3 - Enterprise Package
+- Price: 150000+
+- Suitable for: Large-scale projects
+- Includes: Full features, 6 months support, dedicated team
+- Timeline: 12+ weeks
+
+Custom Pricing: Available upon request for specialized needs
+
+===== POLICIES =====
+
+Payment Terms:
+- 30% upfront deposit
+- 40% at milestone completion
+- 30% upon project delivery
+
+Refund Policy:
+- Full refund if project not started
+- Partial refund based on work completed
+- No refund after final delivery
+
+Support Policy:
+- Email support: 24-hour response time
+- Bug fixes: Covered for duration specified in package
+- Feature requests: Quoted separately
+
+Meeting Policy:
+- Initial consultation: Free (30 minutes)
+- Regular meetings: Weekly during project
+- Available: Monday-Friday, 9 AM - 6 PM PST
+
+===== FAQS =====
+
+Q: What technologies do you use?
+A: We primarily use React, Node.js, Python, and cloud platforms like AWS.
+
+Q: Do you sign NDAs?
+A: Yes, we sign NDAs before discussing project details.
+
+Q: What is your development process?
+A: We follow Agile methodology with 2-week sprints and regular client updates.
+
+Q: Do you provide maintenance?
+A: Yes, maintenance packages available starting at $500/month.
+
+Q: Can you work with existing code?
+A: Yes, we can audit, maintain, or extend existing applications.
+
+Q: What is your availability?
+A: Monday-Friday, 9 AM - 6 PM PST. Emergency support available.
+
+===== CONTACT =====
+
+Email: hello@techstart.solutions
+Phone: (555) 123-4567
+Website: www.techstart.solutions
+Address: 123 Startup Lane, San Francisco, CA 94102

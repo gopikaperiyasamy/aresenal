@@ -1,0 +1,911 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Email Assistant - AI Powered</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        .ai-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1.3fr;
+            gap: 25px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+
+        .panel-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-icon {
+            font-size: 24px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .email-count {
+            font-size: 13px;
+            color: #7f8c8d;
+            font-weight: 600;
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border-radius: 8px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+            color: white;
+        }
+
+        .btn-send {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-size: 15px;
+            padding: 14px 28px;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .email-list {
+            max-height: 650px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .email-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .email-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .email-list::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+        .email-list::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .email-item {
+            padding: 18px;
+            border: 2px solid #e8e8e8;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+            position: relative;
+        }
+
+        .email-item:hover {
+            border-color: #667eea;
+            background: #f5f7ff;
+            transform: translateX(5px);
+        }
+
+        .email-item.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #e0e7ff 0%, #f0e7ff 100%);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .email-item.selected::before {
+            content: '✓';
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            background: #667eea;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .email-from {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 6px;
+            font-size: 15px;
+        }
+
+        .email-subject {
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .email-preview {
+            color: #7f8c8d;
+            font-size: 13px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .email-time {
+            font-size: 12px;
+            color: #95a5a6;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-right: 8px;
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-intent {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .badge-urgency-high {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(245, 87, 108, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(245, 87, 108, 0);
+            }
+        }
+
+        .badge-urgency-medium {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+
+        .badge-urgency-low {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #2c3e50;
+        }
+
+        .badge-sender {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #2c3e50;
+        }
+
+        .email-detail {
+            margin-bottom: 25px;
+        }
+
+        .detail-label {
+            font-weight: 700;
+            color: #7f8c8d;
+            font-size: 13px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            color: #2c3e50;
+            margin-bottom: 18px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .email-body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 12px;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.7;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 2px solid #e8e8e8;
+        }
+
+        .draft-reply {
+            margin-top: 25px;
+        }
+
+        .draft-textarea {
+            width: 100%;
+            min-height: 280px;
+            padding: 20px;
+            border: 3px solid #e8e8e8;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.7;
+            resize: vertical;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .draft-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #7f8c8d;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #95a5a6;
+        }
+
+        .empty-state-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .status-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .status-icon {
+            font-size: 18px;
+        }
+
+        .analysis-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 2px solid #e8e8e8;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            display: none;
+            max-width: 400px;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        .notification.success {
+            border-left: 4px solid #27ae60;
+        }
+
+        .notification.error {
+            border-left: 4px solid #e74c3c;
+        }
+
+        .send-confirm-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .send-confirm-modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .modal-body {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .panel {
+                padding: 20px;
+            }
+
+            .btn {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 Smart Email Assistant</h1>
+            <p class="subtitle">AI-Powered Dynamic Email Response System with Auto-Send</p>
+            <div class="ai-badge">✨ Powered by Gemini AI</div>
+        </header>
+
+        <div class="main-content">
+            <!-- Email List Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">
+                            <span class="panel-icon">📬</span>
+                            Inbox
+                        </h2>
+                    </div>
+                    <div class="controls">
+                        <span class="email-count" id="emailCount">0 emails</span>
+                        <button class="btn btn-primary" onclick="fetchEmails()">
+                            🔄 Refresh
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="status-bar" id="statusBar">
+                    <span class="status-icon">💡</span>
+                    <span>Ready to fetch emails</span>
+                </div>
+
+                <div id="emailList" class="email-list">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📧</div>
+                        <p>Click "Refresh" to fetch emails from your inbox</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Detail and Draft Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        <span class="panel-icon">✉️</span>
+                        Email Details & AI Draft Reply
+                    </h2>
+                </div>
+
+                <div id="emailDetail">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">👈</div>
+                        <p>Select an email to analyze and generate a personalized AI response</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification">
+        <span id="notificationText"></span>
+    </div>
+
+    <!-- Send Confirmation Modal -->
+    <div id="sendModal" class="send-confirm-modal">
+        <div class="modal-content">
+            <div class="modal-header">📤 Confirm Send Email</div>
+            <div class="modal-body">
+                Are you sure you want to send this email reply?<br><br>
+                <strong>To:</strong> <span id="modalTo"></span><br>
+                <strong>Subject:</strong> <span id="modalSubject"></span>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeSendModal()">Cancel</button>
+                <button class="btn btn-send" onclick="confirmSendEmail()">📤 Send Email</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentEmails = [];
+        let selectedEmail = null;
+        let currentDraft = null;
+
+        // Fetch emails from server
+        async function fetchEmails() {
+            const statusBar = document.getElementById('statusBar');
+            const emailList = document.getElementById('emailList');
+            const emailCount = document.getElementById('emailCount');
+            
+            statusBar.innerHTML = '<span class="status-icon">⏳</span><span>Fetching emails from server...</span>';
+            emailList.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading emails from your inbox...</p></div>';
+
+            try {
+                const response = await fetch('/api/emails?limit=50');
+                const data = await response.json();
+
+                if (data.success) {
+                    currentEmails = data.emails;
+                    displayEmails(currentEmails);
+                    emailCount.textContent = `${data.count} emails`;
+                    statusBar.innerHTML = `<span class="status-icon">✅</span><span>Successfully loaded ${data.count} emails</span>`;
+                    showNotification(`Loaded ${data.count} emails successfully`, 'success');
+                } else {
+                    emailList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">❌</div><p>Error loading emails</p></div>';
+                    statusBar.innerHTML = `<span class="status-icon">❌</span><span>Error: ${data.error}</span>`;
+                    showNotification('Failed to load emails', 'error');
+                }
+            } catch (error) {
+                emailList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">⚠️</div><p>Connection error. Please check your server.</p></div>';
+                statusBar.innerHTML = '<span class="status-icon">⚠️</span><span>Connection error</span>';
+                showNotification('Connection error. Please check your server.', 'error');
+                console.error('Fetch error:', error);
+            }
+        }
+
+        // Display emails in the list
+        function displayEmails(emails) {
+            const emailList = document.getElementById('emailList');
+            
+            if (emails.length === 0) {
+                emailList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No emails found in your inbox</p></div>';
+                return;
+            }
+
+            emailList.innerHTML = emails.map((email, index) => `
+                <div class="email-item" onclick="selectEmail('${email.email_id}')" data-email-id="${email.email_id}">
+                    <div class="email-from">📤 ${escapeHtml(email.from)}</div>
+                    <div class="email-subject">📋 ${escapeHtml(email.subject)}</div>
+                    <div class="email-preview">${escapeHtml(email.body.substring(0, 120))}...</div>
+                    <div class="email-time">🕐 ${email.received_time || 'Unknown date'}</div>
+                </div>
+            `).join('');
+        }
+
+        // Select and analyze an email
+        async function selectEmail(emailId) {
+            const email = currentEmails.find(e => e.email_id === emailId);
+            if (!email) return;
+
+            selectedEmail = email;
+            currentDraft = null;
+
+            // Highlight selected email
+            document.querySelectorAll('.email-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            const selectedItem = document.querySelector(`[data-email-id="${emailId}"]`);
+            if (selectedItem) {
+                selectedItem.classList.add('selected');
+                selectedItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            // Show loading state
+            const emailDetail = document.getElementById('emailDetail');
+            emailDetail.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>🤖 AI is analyzing email and generating personalized response...</p>
+                    <p style="font-size: 13px; margin-top: 10px; color: #95a5a6;">Searching knowledge base for relevant information...</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(email)
+                });
+
+                const analysis = await response.json();
+                currentDraft = analysis.draft_reply;
+                displayEmailDetail(email, analysis);
+                showNotification('✨ AI draft reply generated successfully!', 'success');
+            } catch (error) {
+                emailDetail.innerHTML = '<div class="empty-state"><div class="empty-state-icon">❌</div><p>Error analyzing email. Please try again.</p></div>';
+                showNotification('Error analyzing email', 'error');
+                console.error('Analysis error:', error);
+            }
+        }
+
+        // Display email details and draft reply
+        function displayEmailDetail(email, analysis) {
+            const emailDetail = document.getElementById('emailDetail');
+            const { email_analysis, draft_reply } = analysis;
+
+            const urgencyClass = `badge-urgency-${email_analysis.urgency.toLowerCase()}`;
+
+            emailDetail.innerHTML = `
+                <div class="email-detail">
+                    <div class="detail-label">From</div>
+                    <div class="detail-value">📤 ${escapeHtml(email.from)}</div>
+
+                    <div class="detail-label">Subject</div>
+                    <div class="detail-value">📋 ${escapeHtml(email.subject)}</div>
+
+                    <div class="detail-label">Received</div>
+                    <div class="detail-value">🕐 ${email.received_time || 'Unknown date'}</div>
+
+                    <div class="detail-label">Email Body</div>
+                    <div class="email-body">${escapeHtml(email.body)}</div>
+                </div>
+
+                <div class="analysis-section">
+                    <div class="detail-label">📊 AI Email Analysis</div>
+                    <div>
+                        <span class="badge badge-intent">🎯 ${email_analysis.intent}</span>
+                        <span class="badge ${urgencyClass}">⚡ ${email_analysis.urgency} Priority</span>
+                        <span class="badge badge-sender">👤 ${email_analysis.sender_type}</span>
+                    </div>
+                </div>
+
+                <div class="draft-reply">
+                    <div class="detail-label">🤖 AI-Generated Ready-to-Send Reply</div>
+                    <div class="ai-badge" style="margin-bottom: 15px;">✨ Generated from Knowledge Base - Ready to Send</div>
+                    <textarea class="draft-textarea" id="draftContent">${draft_reply.required ? escapeHtml(draft_reply.content) : 'No reply needed for this email.'}</textarea>
+                    
+                    ${draft_reply.required ? `
+                        <div class="action-buttons">
+                            <button class="btn btn-send" onclick="openSendModal()">
+                                📤 Send Email
+                            </button>
+                            <button class="btn btn-success" onclick="copyDraft()">
+                                📋 Copy Draft
+                            </button>
+                            <button class="btn btn-secondary" onclick="editDraft()">
+                                ✏️ Edit Draft
+                            </button>
+                            <button class="btn btn-primary" onclick="regenerateDraft()">
+                                🔄 Regenerate
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // Open send confirmation modal
+        function openSendModal() {
+            if (!selectedEmail) return;
+            
+            const modal = document.getElementById('sendModal');
+            document.getElementById('modalTo').textContent = selectedEmail.from;
+            document.getElementById('modalSubject').textContent = `Re: ${selectedEmail.subject}`;
+            modal.classList.add('show');
+        }
+
+        // Close send modal
+        function closeSendModal() {
+            const modal = document.getElementById('sendModal');
+            modal.classList.remove('show');
+        }
+
+        // Confirm and send email
+        async function confirmSendEmail() {
+            if (!selectedEmail || !currentDraft) return;
+            
+            closeSendModal();
+            
+            const draftContent = document.getElementById('draftContent').value;
+            
+            // Show sending notification
+            showNotification('📤 Sending email...', 'success');
+            
+            try {
+                const response = await fetch('/api/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        to: selectedEmail.from,
+                        subject: selectedEmail.subject,
+                        body: draftContent
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('✅ Email sent successfully!', 'success');
+                } else {
+                    showNotification(`❌ Failed to send email: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showNotification('❌ Error sending email', 'error');
+                console.error('Send error:', error);
+            }
+        }
+
+        // Copy draft to clipboard
+        function copyDraft() {
+            const draftContent = document.getElementById('draftContent');
+            draftContent.select();
+            document.execCommand('copy');
+            showNotification('✅ Draft copied to clipboard!', 'success');
+        }
+
+        // Enable editing of draft
+        function editDraft() {
+            const draftContent = document.getElementById('draftContent');
+            draftContent.focus();
+            draftContent.setSelectionRange(draftContent.value.length, draftContent.value.length);
+            showNotification('✏️ You can now edit the draft.', 'success');
+        }
+
+        // Regenerate draft
+        function regenerateDraft() {
+            if (selectedEmail) {
+                selectEmail(selectedEmail.email_id);
+                showNotification('🔄 Regenerating response...', 'success');
+            }
+        }
+
+        // Show notification toast
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 4000);
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text || '';
+            return div.innerHTML;
+        }
+
+        // Auto-fetch emails on page load
+        window.addEventListener('load', () => {
+            setTimeout(fetchEmails, 500);
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeSendModal();
+            }
+        });
+    </script>
+</body>
+</html>
